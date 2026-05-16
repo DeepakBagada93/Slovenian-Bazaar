@@ -83,28 +83,16 @@
         }
 
         .horizontal-scroll-container {
-            width: 100%;
-            display: block;
+            width: 400%;
+            height: 100vh;
+            display: flex;
+            flex-wrap: nowrap;
         }
 
         .horizontal-section {
-            width: 100%;
-            min-height: 100vh;
+            width: 100vw;
+            height: 100vh;
             flex-shrink: 0;
-        }
-
-        @media (min-width: 768px) {
-            .horizontal-scroll-container {
-                width: 400%;
-                height: 100vh;
-                display: flex;
-                flex-wrap: nowrap;
-            }
-
-            .horizontal-section {
-                width: 100vw;
-                height: 100vh;
-            }
         }
 
         .product-card:hover .product-img {
@@ -313,7 +301,7 @@
 
     <!-- Horizontal Experience Section -->
     <section id="experience" class="relative md:overflow-hidden">
-        <div class="horizontal-scroll-container block md:flex md:w-[400%]">
+        <div class="horizontal-scroll-container flex w-[400%]">
             <div class="horizontal-section relative flex items-center justify-center min-h-[80vh] md:min-h-screen md:w-screen py-20 md:py-0">
                 <div class="absolute inset-0 -z-10">
                     <img src="exp_ingredients_1778917936937.png" class="w-full h-full object-cover opacity-30">
@@ -515,11 +503,11 @@
             });
         });
 
-        // GSAP MatchMedia for Desktop/Mobile Experience
+        // GSAP MatchMedia for Desktop/Mobile Experience (Unified Horizontal Scroll)
         let mm = gsap.matchMedia();
 
-        mm.add("(min-width: 768px)", () => {
-            // Desktop: Horizontal Scroll
+        mm.add("all", () => {
+            // Horizontal Scroll for All Devices
             const sections = gsap.utils.toArray(".horizontal-section");
             const container = document.querySelector(".horizontal-scroll-container");
             
@@ -533,12 +521,11 @@
                     snap: 1 / (sections.length - 1),
                     anticipatePin: 1,
                     invalidateOnRefresh: true,
-                    // Use scrollWidth to get the full width of the content
                     end: () => "+=" + (container.scrollWidth - window.innerWidth)
                 }
             });
 
-            // Text Reveals for Desktop - Reusing scrollTween for containerAnimation
+            // Text Reveals
             sections.forEach(section => {
                 const text = section.querySelector(".text-reveal");
                 if (text) {
@@ -555,22 +542,6 @@
                         }
                     });
                 }
-            });
-        });
-
-        mm.add("(max-width: 767px)", () => {
-            // Mobile: Standard Fade Reveal for Stacked Sections
-            gsap.utils.toArray(".horizontal-section").forEach(section => {
-                gsap.from(section.querySelector(".text-reveal"), {
-                    scrollTrigger: {
-                        trigger: section,
-                        start: "top 80%",
-                    },
-                    y: 50,
-                    opacity: 0,
-                    duration: 1.2,
-                    ease: "power3.out"
-                });
             });
         });
 
